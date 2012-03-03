@@ -1,1 +1,7 @@
-<a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+{% extends "base.html" %}
+
+{% block title %} Hackr Login {% endblock %}
+
+{% block content %}
+  <a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+{% endblock %}

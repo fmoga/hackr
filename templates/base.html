@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{% block title %}Title{% endblock %}</title>
+    {% block styles %}
+      <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+      <link href='{{STATIC_URL}}css/base.css' rel='stylesheet' type='text/css'>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="content">
+    {% block content %}{% endblock %}
+    </div>
+    <div id="scripts">
+    {% block scripts %}{% endblock %}
+    </div>
+  </body>
+</html>

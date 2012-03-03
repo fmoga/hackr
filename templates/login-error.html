@@ -1,2 +1,8 @@
-<h3>Login Error. Try again.</h3>
-<a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+{% extends "base.html" %}
+
+{% block title %}Hackr Login Error{% endblock %}
+
+{% block content %}
+  <h3>Login Error. Try again.</h3>
+  <a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+{% endblock %}

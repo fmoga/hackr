@@ -1,4 +1,10 @@
-<a href="/logout">Logout</a>
-<h3>It works!</h3>
-<div>{{logged_user.full_name}}</div>
-<img src="{{logged_user.picture}}"/>
+{% extends "base.html" %}
+
+{% block title %} Hackr {% endblock %}
+
+{% block content %}
+  <a href="/logout">Logout</a>
+  <h3>It works!</h3>
+  <div>{{logged_user.full_name}}</div>
+  <img src="{{logged_user.picture}}"/>
+{% endblock %}
