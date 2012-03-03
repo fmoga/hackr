@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('',
   url(r'^$', 'events.views.index'),
-  url(r'^google', 'events.views.login'),
+  url(r'^login/$', 'events.views.login'),
   url(r'^logout/$', 'events.views.logout'),
   url(r'^login-error/$', 'events.views.login_error'),
 )
