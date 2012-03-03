@@ -16,11 +16,11 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
 )
 
-urlpatterns += patterns('',
-  url(r'^$', 'events.views.index'),
-  url(r'^login/$', 'events.views.login'),
-  url(r'^logout/$', 'events.views.logout'),
-  url(r'^login-error/$', 'events.views.login_error'),
+urlpatterns += patterns('events.views',
+  url(r'^$', 'index'),
+  url(r'^login/$', 'login'),
+  url(r'^logout/$', 'logout'),
+  url(r'^login-error/$', 'login_error'),
 )
 
 urlpatterns += patterns('',
