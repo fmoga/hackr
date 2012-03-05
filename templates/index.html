@@ -2,6 +2,32 @@
 
 {% block title %} Hackr {% endblock %}
 
+{% block styles %} 
+  {{ block.super }}
+  <link href='{{STATIC_URL}}css/index.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
 {% block content %}
-  Content goes here
+  <div id="content">
+    {% for hack in hackathons %}
+      <a href='#'><h3>{{hack.title}}</h3></a>
+      <div class="indent">
+        <p class="description">{{hack.description}}</p>
+        <table class="details">
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
+            <td>{{hack.start.date}}</td>
+          </tr>
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
+            <td>{{hack.start.time}}</td>
+          </tr>
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
+            <td>{{hack.location}}</td>
+          </tr>
+        </table>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

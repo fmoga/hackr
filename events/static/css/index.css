@@ -1,0 +1,30 @@
+#content .description {
+  font-style: italic;
+  color: #333;
+}
+
+#content a {
+  text-decoration: none;
+}
+
+#content a h3 {
+  color: #333;
+  margin-bottom: 0px;
+}
+
+.indent {
+  margin: 0 0 0 15px;
+  overflow: auto;
+}
+
+p, table {
+  margin: 0;
+}
+
+.details {
+  font-size: 12px;
+}
+
+.details td.icon {
+  text-align: center;
+}

@@ -27,6 +27,7 @@ class Hackathon(models.Model):
   start = models.DateTimeField()
   finish = models.DateTimeField()
   location = models.CharField(max_length=200)
+  creator = models.ForeignKey(User)
 
   def __unicode__(self):
     return u'%s' % self.title
