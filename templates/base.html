@@ -5,14 +5,16 @@
     {% block styles %}
       <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
       <link href='{{STATIC_URL}}css/base.css' rel='stylesheet' type='text/css'>
+      {% if user.is_authenticated %}
+        <link href='{{STATIC_URL}}css/header.css' rel='stylesheet' type='text/css'>
+      {% endif %}
     {% endblock %}
   </head>
   <body>
-    <div id="content">
+    {% if user.is_authenticated %}
+      {% include 'header.html' %}
+    {% endif %}
     {% block content %}{% endblock %}
-    </div>
-    <div id="scripts">
     {% block scripts %}{% endblock %}
-    </div>
   </body>
 </html>

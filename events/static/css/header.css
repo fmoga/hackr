@@ -1,0 +1,7 @@
+#header #logout {
+  float: right;
+}
+
+#header .username {
+  font-weight: bold;
+}
