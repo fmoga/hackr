@@ -147,9 +147,10 @@ AUTHENTICATION_BACKENDS = (
   'django.contrib.auth.backends.ModelBackend',
 )
 
+AUTH_PROFILE_MODULE = "events.UserProfile"
+
 GOOGLE_OAUTH2_CLIENT_ID      = '213765295946.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET  = 'ZoIgYBOoEjZ7FqtInCwARDhq'
-# GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/userinfo.profile']
 
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'

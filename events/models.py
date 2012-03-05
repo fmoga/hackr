@@ -1,11 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from social_auth.signals import pre_update
+from events.googlebackend import GoogleProfileBackend
+from pprint import pprint
 
-class HackrUser(models.Model):
-  google_id = models.CharField(primary_key=True, max_length=30)
-  first_name = models.CharField(max_length=50, null=True)
-  last_name = models.CharField(max_length=50, null=True)
+# Models
+
+class UserProfile(models.Model):
+  # required field for django user profiles
+  user = models.OneToOneField(User)
+  # custom fields
+  google_id = models.CharField(max_length=30, null=True)
   full_name = models.CharField(max_length=100, null=True)
-  email = models.EmailField()
   profile = models.CharField(max_length=200, null=True)
   picture = models.CharField(max_length=200, null=True)
 
@@ -21,11 +28,26 @@ class Hackathon(models.Model):
 class Project(models.Model):
   title = models.CharField(max_length=100)
   description = models.TextField()
-  creator = models.ForeignKey(HackrUser, related_name='created_projects')
+  creator = models.ForeignKey(User, related_name='created_projects')
   event = models.ForeignKey(Hackathon)
-  hackers = models.ManyToManyField(HackrUser, related_name='joined_projects')
+  hackers = models.ManyToManyField(User, related_name='joined_projects')
 
-class Comment(models.Model):
-  text = models.TextField()
-  project = models.ForeignKey(Project)
-  creator = models.ForeignKey(HackrUser)
+# Signals for models
+
+def create_user_profile(sender, instance, created, **kwargs):
+  if created:
+    UserProfile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)
+
+def google_extra_values(sender, user, response, details, **kwargs):
+  profile = user.get_profile()
+  profile.google_id = response.get('id')
+  profile.full_name = response.get('name')
+  profile.picture = response.get('picture')
+  profile.profile = response.get('link')
+  pprint(vars(profile))
+  profile.save()
+  return True
+
+pre_update.connect(google_extra_values, sender=GoogleProfileBackend)

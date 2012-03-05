@@ -6,10 +6,6 @@ from django.utils import simplejson
 from social_auth.backends import USERNAME
 from social_auth.backends.google import GoogleOAuth2, GoogleOAuth2Backend, BACKENDS
 
-from events.models import HackrUser
-
-from pprint import pprint
-
 import settings
 
 
@@ -20,22 +16,12 @@ class GoogleProfileBackend(GoogleOAuth2Backend):
 
   def get_user_details(self, response):
     """Return user details from Google account"""
-    user = HackrUser(
-      google_id=response.get('id'),
-      first_name=response.get('given_name'),
-      last_name=response.get('family_name'),
-      full_name=response.get('name'),
-      email=response.get('email'),
-      profile=response.get('link'),
-      picture=response.get('picture', self.DEFAULT_PICTURE)
-    )
-    user.save()
-
     email = response['email']
     return {
       USERNAME: email.split('@', 1)[0],
       'email': email,
-      'first_name': response.get('id',''),
+      'first__name': response.get('given_name'),
+      'last_name': response.get('family_name') 
     }
 
 

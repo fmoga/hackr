@@ -5,6 +5,6 @@
 {% block content %}
   <a href="/logout">Logout</a>
   <h3>It works!</h3>
-  <div>{{logged_user.full_name}}</div>
-  <img src="{{logged_user.picture}}"/>
+  <div>{{user.get_profile.full_name}}</div>
+  <img src="{{user.get_profile.picture}}"/>
 {% endblock %}
