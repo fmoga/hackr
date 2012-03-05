@@ -17,13 +17,19 @@ class UserProfile(models.Model):
   picture = models.CharField(max_length=200, null=True)
 
   def __unicode__(self):
-    return self.full_name
+    if self.full_name:
+      return u'%s' % self.full_name
+    return self.user.username
 
 class Hackathon(models.Model):
   title = models.CharField(max_length=100)
   description = models.TextField()
   start = models.DateTimeField()
   finish = models.DateTimeField()
+  location = models.CharField(max_length=200)
+
+  def __unicode__(self):
+    return u'%s' % self.title
 
 class Project(models.Model):
   title = models.CharField(max_length=100)

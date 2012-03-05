@@ -1,7 +1,6 @@
 # Django settings for hackr project.
 from os.path import abspath, dirname, basename, join
 from django.template.defaultfilters import slugify
-import social_auth
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -136,10 +135,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'social_auth',
     'events',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
 )
 
 AUTHENTICATION_BACKENDS = (
