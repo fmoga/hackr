@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %} {{hack.title}} {% endblock %}
+
+{% block styles %} 
+  {{ block.super }}
+  <link href='{{STATIC_URL}}css/index.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block content %}
+  <div id="content">
+    <a href='{% url events.views.index %}'>&larr; Event list</a>
+    <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
+    {% if hack.creator.get_profile.google_id == user.get_profile.google_id %}
+      <div class="controls">
+        <a href='{% url events.views.edit_event hack.id %}'>Edit</a>
+        <a href='{% url events.views.delete_event hack.id %}'>Delete</a>
+      </div>
+    {% endif %}
+    <div class="indent">
+      <p class="description">{{hack.description}}</p>
+      <table class="details">
+        <tr>
+          <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
+          <td>{{hack.start.date}}</td>
+        </tr>
+        <tr>
+          <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
+          <td>{{hack.start.time}}</td>
+        </tr>
+        <tr>
+          <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
+          <td>{{hack.location}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+{% endblock %}

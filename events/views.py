@@ -1,5 +1,5 @@
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.template import RequestContext
 from django.contrib.auth import logout as auth_logout
 from decorators import check_login
@@ -25,17 +25,19 @@ def logout(request):
 
 @check_login()
 def event(request, event_id):
-  event = Hackathon.objects.get(pk=event_id)
-  return render_to_response('event.html', {'event': event} , RequestContext(request))
+  hack = get_object_or_404(Hackathon, pk=event_id)
+  return render_to_response('event.html', {'hack': hack} , RequestContext(request))
+
+def add_event(request):
+  # TODO
+  return HttpResponseNotFound('<h1>Not Yet Implemented</h1>')
 
 @check_login()
 def edit_event(request, event_id):
-  return HttpResponseRedirect(reverse('events.views.login'))
+  # TODO
+  return HttpResponseNotFound('<h1>Not Yet Implemented</h1>')
 
 @check_login()
 def delete_event(request, event_id):
-  return HttpResponseRedirect(reverse('events.views.login'))
-
-@check_login()
-def event_status(request, event_id):
-  return HttpResponseRedirect(reverse('events.views.login'))
+  # TODO
+  return HttpResponseNotFound('<h1>Not Yet Implemented</h1>')

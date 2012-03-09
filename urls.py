@@ -12,9 +12,9 @@ urlpatterns += patterns('events.views',
   url(r'^login/$', 'login'),
   url(r'^logout/$', 'logout'),
   url(r'^login-error/$', 'login_error'),
+  url(r'^event/add/$', 'add_event'),
   url(r'^event/(?P<event_id>\d+)/edit/$', 'edit_event'),
   url(r'^event/(?P<event_id>\d+)/delete/$', 'delete_event'),
-  url(r'^event/(?P<event_id>\d+)/state/$', 'event_status'),
   url(r'^event/(?P<event_id>\d+)/$', 'event'),
 )
 
