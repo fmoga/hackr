@@ -10,7 +10,14 @@
 {% block content %}
   <div id="content">
     {% for hack in hackathons %}
-      <a href='#'><h3>{{hack.title}}</h3></a>
+      <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
+      {% if hack.creator.get_profile.google_id == user.get_profile.google_id %}
+        <div class="controls">
+          <a href='{% url events.views.event_status hack.id %}'>State</a>
+          <a href='{% url events.views.edit_event hack.id %}'>Edit</a>
+          <a href='{% url events.views.delete_event hack.id %}'>Delete</a>
+        </div>
+      {% endif %}
       <div class="indent">
         <p class="description">{{hack.description}}</p>
         <table class="details">

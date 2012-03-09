@@ -21,11 +21,11 @@ class UserProfile(models.Model):
       return u'%s' % self.full_name
     return self.user.username
 
+# TODO: remove finish time and add state (INITIALIZED, VOTE, COMPLETED)
 class Hackathon(models.Model):
   title = models.CharField(max_length=100)
   description = models.TextField()
   start = models.DateTimeField()
-  finish = models.DateTimeField()
   location = models.CharField(max_length=200)
   creator = models.ForeignKey(User)
 

@@ -7,8 +7,11 @@
   text-decoration: none;
 }
 
-#content a h3 {
+#content h3 a {
   color: #333;
+}
+
+#content h3 {
   margin-bottom: 0px;
 }
 

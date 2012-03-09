@@ -22,3 +22,20 @@ def index(request):
 def logout(request):
   auth_logout(request)
   return HttpResponseRedirect(reverse('events.views.login'))
+
+@check_login()
+def event(request, event_id):
+  event = Hackathon.objects.get(pk=event_id)
+  return render_to_response('event.html', {'event': event} , RequestContext(request))
+
+@check_login()
+def edit_event(request, event_id):
+  return HttpResponseRedirect(reverse('events.views.login'))
+
+@check_login()
+def delete_event(request, event_id):
+  return HttpResponseRedirect(reverse('events.views.login'))
+
+@check_login()
+def event_status(request, event_id):
+  return HttpResponseRedirect(reverse('events.views.login'))
