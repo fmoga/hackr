@@ -16,6 +16,8 @@ urlpatterns += patterns('events.views',
   url(r'^event/(?P<event_id>\d+)/edit/$', 'edit_event'),
   url(r'^event/(?P<event_id>\d+)/delete/$', 'delete_event'),
   url(r'^event/(?P<event_id>\d+)/$', 'event'),
+  url(r'^project/(?P<project_id>\d+)/edit/$', 'edit_project'),
+  url(r'^project/(?P<project_id>\d+)/delete/$', 'delete_project'),
 )
 
 urlpatterns += patterns('',

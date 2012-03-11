@@ -1,0 +1,12 @@
+Dependencies
+------------
+
+TODO
+
+Modifying the model
+-------------------
+
+In order to alter the database but keep current data, execute the following:
+  $ python manage.py dumpdata events --format json > dump.json
+  $ python manage.py reset events
+  $ python manage.py loaddata dump.json

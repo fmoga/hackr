@@ -42,6 +42,10 @@ class Project(models.Model):
   creator = models.ForeignKey(User, related_name='created_projects')
   event = models.ForeignKey(Hackathon)
   hackers = models.ManyToManyField(User, related_name='joined_projects')
+  deleted = models.BooleanField(default=False)
+
+  def __unicode__(self):
+    return u'%s' % self.title
 
 # Signals for models
 

@@ -7,7 +7,7 @@ from django import forms
 from django.db import models
 from decorators import check_login
 from django.core.urlresolvers import reverse
-from events.models import Hackathon
+from events.models import Hackathon, Project
 from pprint import pprint
 
 def login(request):
@@ -29,7 +29,18 @@ def logout(request):
 @check_login()
 def event(request, event_id):
   hack = get_object_or_404(Hackathon, pk=event_id)
-  return render_to_response('event.html', {'hack': hack} , RequestContext(request))
+  projects = hack.project_set.filter(deleted=False)
+  if request.method == 'POST':
+    form = ProjectForm(request.POST, label_suffix='')
+    if form.is_valid():
+      new_project = form.save(commit=False)
+      new_project.creator = request.user
+      new_project.event = hack
+      new_project.save()
+      return HttpResponseRedirect(reverse('events.views.event', args=[event_id]))
+  else:
+    form = ProjectForm(label_suffix='')
+  return render_to_response('event.html', {'hack': hack, 'projects': projects, 'form': form} , RequestContext(request))
 
 @check_login()
 def add_event(request):
@@ -67,12 +78,45 @@ def delete_event(request, event_id):
   event.save()
   return HttpResponseRedirect(reverse('events.views.index'))
 
+@check_login()
+def edit_project(request, project_id):
+  project = get_object_or_404(Project, pk=project_id)
+  if not project.creator == request.user:
+    return HttpResponseForbidden()
+  if request.method == 'POST':
+    form = ProjectForm(request.POST, instance=project, label_suffix='')
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))
+  else:
+    form = ProjectForm(instance=project, label_suffix='')
+  return render_to_response('edit_project.html', {'form': form, 'project': project},  RequestContext(request))
+
+@check_login()
+def delete_project(request, project_id):
+  project = get_object_or_404(Project, pk=project_id)
+  if not project.creator == request.user:
+    return HttpResponseForbidden()
+  project.deleted = True
+  project.save()
+  return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))
+
+# Forms
+ 
 class EventForm(ModelForm):
   # specify the custom format and jquery ui class for the datetime field
   start = forms.DateTimeField(('%d %B %Y, %I%p',), widget=forms.DateTimeInput(attrs={'class':'datePicker', 'readonly':'true'}, format='%d %B %Y, %I%p'))
   class Meta:
     model=Hackathon
     fields = ('title', 'description', 'start', 'location')
+    widgets = {
+      'description': Textarea(attrs={'rows': 3}),
+    }
+
+class ProjectForm(ModelForm):
+  class Meta:
+    model=Project
+    fields = ('title', 'description')
     widgets = {
       'description': Textarea(attrs={'rows': 3}),
     }

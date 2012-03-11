@@ -4,6 +4,7 @@
 
 {% block content %}
   <div id="content">
+    <a href='{% url events.views.index %}'>&larr; Event list</a>
     <h3>Edit Event</h3>
     <form method='POST' action='{% url events.views.edit_event event.id %}'>
       {% csrf_token %}
