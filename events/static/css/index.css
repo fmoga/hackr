@@ -3,6 +3,11 @@
   color: #333;
 }
 
+#content .mention {
+  font-size: 12px;
+  font-style: normal;
+}
+
 #content a {
   text-decoration: none;
 }

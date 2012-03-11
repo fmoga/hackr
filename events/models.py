@@ -27,8 +27,8 @@ class Hackathon(models.Model):
   COMPLETED = 2
   title = models.CharField(max_length=100)
   description = models.TextField()
-  start = models.DateTimeField()
-  location = models.CharField(max_length=200)
+  start = models.DateTimeField(verbose_name='When')
+  location = models.CharField(max_length=200, verbose_name='Where')
   creator = models.ForeignKey(User)
   state = models.IntegerField(default=0)
 
