@@ -34,7 +34,7 @@ def event(request, event_id):
 @check_login()
 def add_event(request):
   if request.method == 'POST':
-    form = EventForm(request.POST)
+    form = EventForm(request.POST, label_suffix='')
     if form.is_valid():
       new_event = form.save(commit=False)
       new_event.state = Hackathon.RUNNING
@@ -47,8 +47,15 @@ def add_event(request):
 
 @check_login()
 def edit_event(request, event_id):
-  # TODO
-  return HttpResponseNotFound('<h1>Not Yet Implemented</h1>')
+  event = get_object_or_404(Hackathon, pk=event_id)
+  if request.method == 'POST':
+    form = EventForm(request.POST, instance=event, label_suffix='')
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect(reverse('events.views.index'))
+  else:
+    form = EventForm(instance=event, label_suffix='')
+  return render_to_response('edit_event.html', {'form': form, 'event': event},  RequestContext(request))
 
 @check_login()
 def delete_event(request, event_id):
@@ -57,7 +64,7 @@ def delete_event(request, event_id):
 
 class EventForm(ModelForm):
   # specify the custom format and jquery ui class for the datetime field
-  start = forms.DateTimeField(('%d %B %Y, %I%p',), widget=forms.DateTimeInput(attrs={'class':'datePicker', 'readonly':'true'}))
+  start = forms.DateTimeField(('%d %B %Y, %I%p',), widget=forms.DateTimeInput(attrs={'class':'datePicker', 'readonly':'true'}, format='%d %B %Y, %I%p'))
   class Meta:
     model=Hackathon
     fields = ('title', 'description', 'start', 'location')

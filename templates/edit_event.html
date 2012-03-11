@@ -1,0 +1,14 @@
+{% extends "add_event.html" %}
+
+{% block title %} Edit Event {% endblock %}
+
+{% block content %}
+  <div id="content">
+    <h3>Edit Event</h3>
+    <form method='POST' action='{% url events.views.edit_event event.id %}'>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Edit Event" />
+    </form>
+  </div>
+{% endblock %}
