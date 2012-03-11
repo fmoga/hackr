@@ -133,9 +133,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.comments',
+    'django.contrib.admin',
     'social_auth',
     'events',
-    'django.contrib.admin',
 )
 
 AUTHENTICATION_BACKENDS = (

@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+  {% load comments %}
   <div id="content">
     <a href='{% url events.views.index %}'>&larr; Event list</a>
     <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
@@ -61,6 +62,23 @@
           {% endfor %}
         </div>
       </li>
+      {% get_comment_count for project as comment_count %}
+      <div>Comments: {{comment_count}}</div>
+      {% get_comment_list for project as comments %}
+      {% for comment in comments %}
+        <div>{{comment.user.get_profile.full_name}}: {{comment.comment}}</div>
+      {% endfor %}
+      {% get_comment_form for project as comment_form %}
+      <form action="{% comment_form_target %}" method="POST">
+        {% csrf_token %}
+        {% for field in comment_form %}
+          {% if field.name not in comment_form_excludes %}
+            <p>{{field}}</p>
+          {% endif %}
+        {% endfor %}
+        <input type="hidden" name="next" value="{% url events.views.event project.event.id %}" />
+        <input type="submit" name="submit" value="Post">
+      </form>
     {% endfor %}
     </ul>
     <h3>Quick Add Project</h3>

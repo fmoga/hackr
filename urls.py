@@ -25,3 +25,7 @@ urlpatterns += patterns('events.views',
 urlpatterns += patterns('',
   url(r'', include('social_auth.urls')),
 )
+
+urlpatterns += patterns('',
+  (r'^comments/', include('django.contrib.comments.urls')),
+)

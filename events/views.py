@@ -40,7 +40,7 @@ def event(request, event_id):
       return HttpResponseRedirect(reverse('events.views.event', args=[event_id]))
   else:
     form = ProjectForm(label_suffix='')
-  return render_to_response('event.html', {'hack': hack, 'projects': projects, 'form': form} , RequestContext(request))
+  return render_to_response('event.html', {'hack': hack, 'projects': projects, 'form': form, 'comment_form_excludes': ['name', 'url', 'email', 'honeypot']} , RequestContext(request))
 
 @check_login()
 def add_event(request):
