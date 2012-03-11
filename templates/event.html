@@ -21,7 +21,7 @@
       </div>
     {% endif %}
     <div class="indent">
-      <p class="description">{{hack.description}}</p>
+      <p class="description">{{hack.description|linebreaksbr}}</p>
       <table class="details">
         <tr>
           <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
@@ -53,7 +53,7 @@
             <a href='{% url events.views.delete_project project.id %}'>Delete</a>
           </div>
         {% endif %}
-        <div class="description">{{project.description}}</div>
+        <div class="description">{{project.description|linebreaksbr}}</div>
         <div>Added by {{project.creator.get_profile.full_name}}</div>
         <div>
           Registered hackers:
@@ -66,7 +66,7 @@
       <div>Comments: {{comment_count}}</div>
       {% get_comment_list for project as comments %}
       {% for comment in comments %}
-        <div>{{comment.user.get_profile.full_name}}: {{comment.comment}}</div>
+        <div>{{comment.user.get_profile.full_name}}: {{comment.comment|linebreaksbr}}</div>
       {% endfor %}
       {% get_comment_form for project as comment_form %}
       <form action="{% comment_form_target %}" method="POST">
