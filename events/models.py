@@ -31,6 +31,7 @@ class Hackathon(models.Model):
   location = models.CharField(max_length=200, verbose_name='Where')
   creator = models.ForeignKey(User)
   state = models.IntegerField(default=0)
+  deleted = models.BooleanField(default=False)
 
   def __unicode__(self):
     return u'%s' % self.title

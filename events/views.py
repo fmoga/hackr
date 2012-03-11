@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponseForbidden
 from django.template import RequestContext
 from django.contrib.auth import logout as auth_logout
 from django.forms import ModelForm, Textarea
@@ -18,7 +18,7 @@ def login_error(request):
 
 @check_login()
 def index(request):
-  hackathons = Hackathon.objects.all()
+  hackathons = Hackathon.objects.filter(deleted=False)
   return render_to_response('index.html', {'hackathons': hackathons}, RequestContext(request))
  
 @check_login()
@@ -37,7 +37,6 @@ def add_event(request):
     form = EventForm(request.POST, label_suffix='')
     if form.is_valid():
       new_event = form.save(commit=False)
-      new_event.state = Hackathon.RUNNING
       new_event.creator = request.user
       new_event.save()
       return HttpResponseRedirect(reverse('events.views.index'))
@@ -48,6 +47,8 @@ def add_event(request):
 @check_login()
 def edit_event(request, event_id):
   event = get_object_or_404(Hackathon, pk=event_id)
+  if not event.creator == request.user:
+    return HttpResponseForbidden()
   if request.method == 'POST':
     form = EventForm(request.POST, instance=event, label_suffix='')
     if form.is_valid():
@@ -59,8 +60,12 @@ def edit_event(request, event_id):
 
 @check_login()
 def delete_event(request, event_id):
-  # TODO
-  return HttpResponseNotFound('<h1>Not Yet Implemented</h1>')
+  event = get_object_or_404(Hackathon, pk=event_id)
+  if not event.creator == request.user:
+    return HttpResponseForbidden()
+  event.deleted = True
+  event.save()
+  return HttpResponseRedirect(reverse('events.views.index'))
 
 class EventForm(ModelForm):
   # specify the custom format and jquery ui class for the datetime field
