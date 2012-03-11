@@ -41,6 +41,11 @@
     {% for project in projects %}
       <li>
         <h4>{{project.title}}</h4>
+        {% if user in project.hackers.all %}
+          <a href='{% url events.views.leave_project project.id %}'>Leave</a>
+        {% else %}
+          <a href='{% url events.views.join_project project.id %}'>Join</a>
+        {% endif %}
         {% if project.creator == user %}
           <div class="controls">
             <a href='{% url events.views.edit_project project.id %}'>Edit</a>

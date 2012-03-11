@@ -101,6 +101,22 @@ def delete_project(request, project_id):
   project.save()
   return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))
 
+@check_login()
+def join_project(request, project_id):
+  project = get_object_or_404(Project, pk=project_id)
+  if not request.user in project.hackers.all():
+    project.hackers.add(request.user)
+    project.save()
+  return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))
+
+@check_login()
+def leave_project(request, project_id):
+  project = get_object_or_404(Project, pk=project_id)
+  if request.user in project.hackers.all():
+    project.hackers.remove(request.user)
+    project.save()
+  return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))
+
 # Forms
  
 class EventForm(ModelForm):
