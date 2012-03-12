@@ -1,13 +1,15 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponseForbidden, HttpResponseBadRequest
 from django.template import RequestContext
 from django.contrib.auth import logout as auth_logout
-from django.forms import ModelForm, Textarea
+from django.forms import ModelForm, Textarea, ChoiceField
+from django.forms.widgets import RadioSelect
 from django import forms
 from django.db import models
 from decorators import check_login
 from django.core.urlresolvers import reverse
-from events.models import Hackathon, Project
+from events.models import Hackathon, Project, PollOption
+from datetime import datetime
 from pprint import pprint
 
 def login(request):
@@ -19,7 +21,7 @@ def login_error(request):
 @check_login()
 def index(request):
   hackathons = Hackathon.objects.filter(deleted=False)
-  return render_to_response('index.html', {'hackathons': hackathons}, RequestContext(request))
+  return render_to_response('index.html', {'hackathons': hackathons, 'current_datetime': datetime.now()}, RequestContext(request))
  
 @check_login()
 def logout(request):
@@ -59,7 +61,7 @@ def add_event(request):
 def edit_event(request, event_id):
   event = get_object_or_404(Hackathon, pk=event_id)
   if not event.creator == request.user:
-    return HttpResponseForbidden()
+    return HttpResponseForbidden('<h1>Forbidden - Only event author can perform changes</h1>')
   if request.method == 'POST':
     form = EventForm(request.POST, instance=event, label_suffix='')
     if form.is_valid():
@@ -73,16 +75,60 @@ def edit_event(request, event_id):
 def delete_event(request, event_id):
   event = get_object_or_404(Hackathon, pk=event_id)
   if not event.creator == request.user:
-    return HttpResponseForbidden()
+    return HttpResponseForbidden('<h1>Forbidden - Only event author can perform changes</h1>')
   event.deleted = True
   event.save()
   return HttpResponseRedirect(reverse('events.views.index'))
 
 @check_login()
+def event_state(request, event_id):
+  event = get_object_or_404(Hackathon, pk=event_id)
+  if not event.creator == request.user:
+    return HttpResponseForbidden('<h1>Forbidden - Only event author can perform changes</h1>')
+  if not event.state == Hackathon.COMPLETED:
+    event.state += 1
+    event.save()
+  return HttpResponseRedirect(reverse('events.views.event', args=[event.id]))
+
+@check_login()
+def event_poll(request, event_id):
+  event = get_object_or_404(Hackathon, pk=event_id)
+  if event.state == Hackathon.VOTING:
+    return render_to_response('poll.html', {'event': event},  RequestContext(request))
+  elif event.state == Hackathon.COMPLETED:
+    return render_to_response('poll.html', {'event': event},  RequestContext(request))
+  return HttpResponseNotFound('<h1>Poll Not Found</h1>')
+
+@check_login()
+def vote(request, event_id):
+  event = get_object_or_404(Hackathon, pk=event_id)
+  if event.state != event.VOTING:
+    return HttpResponseForbidden('<h1>Forbidden - Vote is not running</h1>')
+  if request.user in event.voters.all():
+    return HttpResponseForbidden('<h1>Forbidden - You already voted</h1>')
+  option_id = request.POST['option']  
+  if option_id == '-1':
+    # new proposal
+    proposal = request.POST['proposal']
+    new_option = PollOption(event=event, text=proposal, count=1)
+    new_option.save()
+  else:
+    # existing option
+    option = get_object_or_404(PollOption, pk=option_id)
+    print option.text
+    if option.event == event:
+      option.count += 1 
+      option.save()
+    else:
+      return HttpResponseBadRequest('<h1>Bad Request - Option does not belong to poll</h1>')
+  event.voters.add(request.user)
+  return HttpResponseRedirect(reverse('events.views.event_poll', args=[event.id]))
+
+@check_login()
 def edit_project(request, project_id):
   project = get_object_or_404(Project, pk=project_id)
   if not project.creator == request.user:
-    return HttpResponseForbidden()
+    return HttpResponseForbidden('<h1>Forbidden - Only project author can perform changes</h1>')
   if request.method == 'POST':
     form = ProjectForm(request.POST, instance=project, label_suffix='')
     if form.is_valid():
@@ -96,7 +142,7 @@ def edit_project(request, project_id):
 def delete_project(request, project_id):
   project = get_object_or_404(Project, pk=project_id)
   if not project.creator == request.user:
-    return HttpResponseForbidden()
+    return HttpResponseForbidden('<h1>Forbidden - Only project author can perform changes</h1>')
   project.deleted = True
   project.save()
   return HttpResponseRedirect(reverse('events.views.event', args=[project.event.id]))

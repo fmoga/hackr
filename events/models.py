@@ -29,12 +29,21 @@ class Hackathon(models.Model):
   description = models.TextField()
   start = models.DateTimeField(verbose_name='When')
   location = models.CharField(max_length=200, verbose_name='Where')
-  creator = models.ForeignKey(User)
+  creator = models.ForeignKey(User, related_name='created_events')
   state = models.IntegerField(default=0)
+  voters = models.ManyToManyField(User, related_name='voted_events')
   deleted = models.BooleanField(default=False)
 
   def __unicode__(self):
     return u'%s' % self.title
+
+class PollOption(models.Model):
+  event = models.ForeignKey(Hackathon)
+  text = models.CharField(max_length=300)
+  count = models.IntegerField(default=0)
+
+  def __unicode__(self):
+    return u'%s' % self.text
 
 class Project(models.Model):
   title = models.CharField(max_length=100)

@@ -14,8 +14,17 @@
   <div id="content">
     <a href='{% url events.views.index %}'>&larr; Event list</a>
     <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
+    {% if hack.state == hack.VOTING or hack.state == hack.COMPLETED %}
+      <a href='{% url events.views.event_poll hack.id %}'>Go to poll</a>
+    {% endif %}
     {% if hack.creator == user %}
       <div class="controls">
+        {% if hack.state == hack.RUNNING %}
+          <a href='{% url events.views.event_state hack.id %}'>Start vote</a>
+        {% endif %}
+        {% if hack.state == hack.VOTING %}
+          <a href='{% url events.views.event_state hack.id %}'>End vote</a>
+        {% endif %}
         <a href='{% url events.views.edit_event hack.id %}'>Edit</a>
         <a href='{% url events.views.delete_event hack.id %}'>Delete</a>
       </div>
