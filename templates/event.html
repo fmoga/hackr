@@ -29,8 +29,11 @@
     <a href='{% url events.views.index %}'>&larr; Event list</a>
     <div class="event">
       <h2><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h2>
-      {% if hack.state == hack.VOTING or hack.state == hack.COMPLETED %}
-        <a href='{% url events.views.event_poll hack.id %}'>Go to poll</a>
+      {% if hack.state == hack.VOTING %}
+        <a class='poll_link' href='{% url events.views.event_poll hack.id %}'>Vote hackathon hero &rarr;</a>
+      {% endif %}
+      {% if hack.state == hack.COMPLETED %}
+        <a class='poll_link' href='{% url events.views.event_poll hack.id %}'>View hackathon hero results &rarr;</a>
       {% endif %}
       <div class="indent">
         <p class="description">{{hack.description|linebreaksbr|urlize}}</p>

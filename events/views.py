@@ -99,7 +99,7 @@ def event_state(request, event_id):
   if not event.state == Hackathon.COMPLETED:
     event.state += 1
     event.save()
-  return HttpResponseRedirect(reverse('events.views.event', args=[event.id]))
+  return HttpResponseRedirect(reverse('events.views.index'))
 
 @check_login()
 def event_poll(request, event_id):
