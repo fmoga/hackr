@@ -2,3 +2,5 @@
 *.swp
 access.log
 error.log
+hackr.log
+django.pid
