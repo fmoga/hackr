@@ -4,7 +4,7 @@ body, input, textarea {
 }
 
 body {
-  margin: 0;
+  margin: auto;
   min-width: 700px;
 }
 

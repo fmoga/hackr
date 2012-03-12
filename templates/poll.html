@@ -39,7 +39,7 @@
         <h3>Vote results for {{event.title}}</h3>
         <table class='vote_listing'>
           {% for option in event.polloption_set.all %}
-            <tr><td><ul><li><span class='vote_result'>{{option.text}}</span></li></ul></td><td>{{option.count}} sudos</td></tr>
+            <tr><td><ul><li><span class='vote_result'>{{option.text}}</span></li></ul></td><td>{{option.count}} sudo{{option.count|pluralize}}</td></tr>
           {% endfor %}
         </table>
         <h4>Voters</h4>
