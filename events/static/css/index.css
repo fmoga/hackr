@@ -1,15 +1,35 @@
 #content .description {
   font-style: italic;
-  color: #333;
+  color: #000;
+  margin: 2px 0 2px 0;
+  max-width: 500px;
+  word-wrap: break-word;
 }
 
-#content .mention {
+#content .mention, #content .mention a {
   font-size: 12px;
   font-style: normal;
+  font-weight: normal;
+  color: #555;
 }
 
-#content a {
-  text-decoration: none;
+#content .mention a {
+  margin-right: 10px;
+}
+
+#content .state {
+  color: #669900;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+#content .completed {
+  color: #669999;
+}
+
+#content .event {
+  margin-top: 15px;
 }
 
 #content h3 a {
@@ -18,6 +38,15 @@
 
 #content h3 {
   margin-bottom: 0px;
+  display: inline;
+}
+
+#content ol {
+  font-weight: bold;
+}
+
+#content ol .title, #content ol .indent {
+  font-weight: normal;
 }
 
 .indent {
@@ -35,4 +64,38 @@ p, table {
 
 .details td.icon {
   text-align: center;
+}
+
+.vote_form {
+  margin-top: 10px;
+}
+
+.poll_option, .vote_button {
+  margin: 5px 0 5px 0;
+}
+
+.vote_details {
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+h4 {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.vote_listing {
+  margin-top: 10px;
+}
+
+.vote_result {
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.vote_listing ul {
+  margin: 0;
+}
+
+.project_title {
 }

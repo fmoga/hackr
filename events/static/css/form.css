@@ -1,3 +1,7 @@
+#content {
+  color: #333;
+}
+
 textarea {
   vertical-align: bottom;
 }
@@ -25,7 +29,7 @@ p {
 }
 
 ul.errorlist {
-  color: red;
+  color: #D5544F;
   list-style: none;
   padding: 0;
   margin: 0;

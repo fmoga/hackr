@@ -5,39 +5,48 @@
 {% block styles %} 
   {{ block.super }}
   <link href='{{STATIC_URL}}css/index.css' rel='stylesheet' type='text/css'>
+  <link href='{{STATIC_URL}}css/form.css' rel='stylesheet' type='text/css'>
 {% endblock %}
 
 {% block content %}
   <div id="content">
-    <a href='{% url events.views.event event.id %}'>&larr; Back to {{event.title}}</a>
-    {% if event.state == event.VOTING %}
-      <h3>Vote form</h3>
-      <div>Number of votes: {{ event.voters.all|length }}</div>
-      <form action="{% url events.views.vote event.id %}" method="POST">
-        {% csrf_token %}
-        {% for option in event.polloption_set.all %}
-          <input type="radio" name="option" id="choice{{ forloop.counter }}" value="{{ option.id }}" />
-          <label for="choice{{ forloop.counter }}">{{ option.text }}</label><br />
+    <a href='{% url events.views.event event.id %}'>&larr; Back to event</a>
+    <div class='vote_form'>
+      {% if event.state == event.VOTING %}
+        <h3>Vote form for {{event.title}}</h3>
+        <form action="{% url events.views.vote event.id %}" method="POST">
+          {% csrf_token %}
+          {% for option in event.polloption_set.all %}
+            <div class='poll_option'>
+              <input type="radio" name="option" id="choice{{ forloop.counter }}" value="{{ option.id }}" />
+              <label for="choice{{ forloop.counter }}">{{ option.text }}</label>
+            </div>
+          {% endfor %}
+          <div class='poll_option'>
+            <input type="radio" name="option" id="choice" value="-1" checked='checked'/>
+            <label for="choice">New proposal</label>
+            <input type="text" name='proposal'/>
+          </div>
+          {% if user in event.voters.all %}
+            <input class='vote_button' type="submit" disabled="disabled" value="You already voted" />
+          {% else %}
+            <input class-'vote_button' type="submit" value="Vote" />
+          {% endif %}
+        </form>
+        <div class='vote_details'>Current number of votes: {{ event.voters.all|length }}</div>
+      {% endif %}
+      {% if event.state == event.COMPLETED %}
+        <h3>Vote results for {{event.title}}</h3>
+        <table class='vote_listing'>
+          {% for option in event.polloption_set.all %}
+            <tr><td><ul><li><span class='vote_result'>{{option.text}}</span></li></ul></td><td>{{option.count}} sudos</td></tr>
+          {% endfor %}
+        </table>
+        <h4>Voters</h4>
+        {% for voter in event.voters.all %}
+          <img class='avatar' alt='{{voter.get_profile.full_name}}' title='{{voter.get_profile.full_name}}' src='{{voter.get_profile.picture}}'>
         {% endfor %}
-        <input type="radio" name="option" id="choice" value="-1" checked='checked'/>
-        <label for="choice">New proposal</label>
-        <input type="text" name='proposal'/><br />
-        {% if user in event.voters.all %}
-          <input type="submit" disabled="disabled" value="You already voted" />
-        {% else %}
-          <input type="submit" value="Vote" />
-        {% endif %}
-      </form>
-    {% endif %}
-    {% if event.state == event.COMPLETED %}
-      <h3>Vote results for {{event.title}}</h3>
-      {% for option in event.polloption_set.all %}
-        <div>{{option.text}} : {{option.count}}</div>    
-      {% endfor %}
-      <h4>Voters</h4>
-      {% for voter in event.voters.all %}
-        <img src='{{voter.get_profile.picture}}'>
-      {% endfor %}
-    {% endif %}
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

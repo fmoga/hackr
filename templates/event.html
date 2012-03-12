@@ -4,97 +4,109 @@
 
 {% block styles %} 
   {{ block.super }}
+  <link href='{{STATIC_URL}}css/form.css' rel='stylesheet' type='text/css'>
   <link href='{{STATIC_URL}}css/index.css' rel='stylesheet' type='text/css'>
   <link href='{{STATIC_URL}}css/event.css' rel='stylesheet' type='text/css'>
-  <link href='{{STATIC_URL}}css/form.css' rel='stylesheet' type='text/css'>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+  <script type='text/javascript'>
+    $(document).ready(function() {
+      $('.comment_title a').click(function() {
+        classname = $(this).attr('for');
+        $('#' + classname).slideToggle();
+        return false;
+      });
+    });
+  </script>
 {% endblock %}
 
 {% block content %}
   {% load comments %}
   <div id="content">
     <a href='{% url events.views.index %}'>&larr; Event list</a>
-    <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
-    {% if hack.state == hack.VOTING or hack.state == hack.COMPLETED %}
-      <a href='{% url events.views.event_poll hack.id %}'>Go to poll</a>
-    {% endif %}
-    {% if hack.creator == user %}
-      <div class="controls">
-        {% if hack.state == hack.RUNNING %}
-          <a href='{% url events.views.event_state hack.id %}'>Start vote</a>
-        {% endif %}
-        {% if hack.state == hack.VOTING %}
-          <a href='{% url events.views.event_state hack.id %}'>End vote</a>
-        {% endif %}
-        <a href='{% url events.views.edit_event hack.id %}'>Edit</a>
-        <a href='{% url events.views.delete_event hack.id %}'>Delete</a>
+    <div class="event">
+      <h2><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h2>
+      {% if hack.state == hack.VOTING or hack.state == hack.COMPLETED %}
+        <a href='{% url events.views.event_poll hack.id %}'>Go to poll</a>
+      {% endif %}
+      <div class="indent">
+        <p class="description">{{hack.description|linebreaksbr|urlize}}</p>
+        <table class="details">
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
+            <td>{{hack.start.date}}</td>
+          </tr>
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
+            <td>{{hack.start.time}}</td>
+          </tr>
+          <tr>
+            <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
+            <td>{{hack.location}}</td>
+          </tr>
+        </table>
       </div>
-    {% endif %}
-    <div class="indent">
-      <p class="description">{{hack.description|linebreaksbr}}</p>
-      <table class="details">
-        <tr>
-          <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
-          <td>{{hack.start.date}}</td>
-        </tr>
-        <tr>
-          <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
-          <td>{{hack.start.time}}</td>
-        </tr>
-        <tr>
-          <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
-          <td>{{hack.location}}</td>
-        </tr>
-      </table>
     </div>
     <h3>Projects</h3>
-    <ul>
+    <ol>
     {% for project in projects %}
       <li>
-        <h4>{{project.title}}</h4>
-        {% if user in project.hackers.all %}
-          <a href='{% url events.views.leave_project project.id %}'>Leave</a>
-        {% else %}
-          <a href='{% url events.views.join_project project.id %}'>Join</a>
-        {% endif %}
-        {% if project.creator == user %}
-          <div class="controls">
-            <a href='{% url events.views.edit_project project.id %}'>Edit</a>
-            <a href='{% url events.views.delete_project project.id %}'>Delete</a>
-          </div>
-        {% endif %}
-        <div class="description">{{project.description|linebreaksbr}}</div>
-        <div>Added by {{project.creator.get_profile.full_name}}</div>
-        <div>
-          Registered hackers:
-          {% for hacker in project.hackers.all %}
-            {{hacker.get_profile.full_name}}&nbsp;
-          {% endfor %}
-        </div>
-      </li>
-      {% get_comment_count for project as comment_count %}
-      <div>Comments: {{comment_count}}</div>
-      {% get_comment_list for project as comments %}
-      {% for comment in comments %}
-        <div>{{comment.user.get_profile.full_name}}: {{comment.comment|linebreaksbr}}</div>
-      {% endfor %}
-      {% get_comment_form for project as comment_form %}
-      <form action="{% comment_form_target %}" method="POST">
-        {% csrf_token %}
-        {% for field in comment_form %}
-          {% if field.name not in comment_form_excludes %}
-            <p>{{field}}</p>
+        <h3 class='project_title'>{{project.title}}</h3>
+        <div class='indent'>
+          {% if project.creator == user %}
+            <div class="mention controls">
+              <a href='{% url events.views.edit_project project.id %}'>Edit</a>
+              <a href='{% url events.views.delete_project project.id %}'>Delete</a>
+            </div>
+          {% else %}
+            <div class='mention'>Added by {{project.creator.get_profile.full_name}}</div>
           {% endif %}
-        {% endfor %}
-        <input type="hidden" name="next" value="{% url events.views.event project.event.id %}" />
-        <input type="submit" name="submit" value="Post">
+          <div class="description">{{project.description|linebreaksbr|urlize}}</div>
+          <div class='participants'>
+            {% for hacker in project.hackers.all %}
+              <img class='avatar' alt=''{{hacker.get_profile.full_name}} title='{{hacker.get_profile.full_name}}' src='{{hacker.get_profile.picture}}'>
+            {% endfor %}
+            {% if user in project.hackers.all %}
+              <a href='{% url events.views.leave_project project.id %}'>Leave</a>
+            {% else %}
+              <a href='{% url events.views.join_project project.id %}'>Join</a>
+            {% endif %}
+          </div>
+          {% get_comment_count for project as comment_count %}
+          <div class='comment_title'><a href='#' for='comment_box_{{project.id}}'>{{comment_count}} Comment{{comment_count|pluralize}}</a></div>
+          <div class='comment_box' id='comment_box_{{project.id}}'>
+            {% get_comment_list for project as comments %}
+            {% for comment in comments %}
+              <div class='comment'>
+                <img class='avatar left' src='{{comment.user.get_profile.picture}}'>
+                <div class='author'>{{comment.user.get_profile.full_name}}</div>
+                <div class='comment_content'>{{comment.comment|linebreaksbr|urlize}}</div>
+              </div>
+            {% endfor %}
+            {% get_comment_form for project as comment_form %}
+            <form class='comment_form' action="{% comment_form_target %}" method="POST">
+              {% csrf_token %}
+              {% for field in comment_form %}
+                {% if field.name not in comment_form_excludes %}
+                  <p>{{field}}</p>
+                {% endif %}
+              {% endfor %}
+              <input type="hidden" name="next" value="{% url events.views.event project.event.id %}" />
+              <input type="submit" name="submit" value="Post">
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      <h3>Quick Add Project</h3>
+      <form action='{% url events.views.event hack.id %}' method='POST'>
+        {% csrf_token %}
+        {{form.as_p}} 
+        <input type='submit' value='Add Project'/>
       </form>
-    {% endfor %}
-    </ul>
-    <h3>Quick Add Project</h3>
-    <form action='{% url events.views.event hack.id %}' method='POST'>
-      {% csrf_token %}
-      {{form.as_p}} 
-      <input type='submit' value='Add Project'/>
-    </form>
+    </div>
   </div>
 {% endblock %}

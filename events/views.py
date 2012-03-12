@@ -21,7 +21,18 @@ def login_error(request):
 @check_login()
 def index(request):
   hackathons = Hackathon.objects.filter(deleted=False)
-  return render_to_response('index.html', {'hackathons': hackathons, 'current_datetime': datetime.now()}, RequestContext(request))
+  in_future = []
+  in_progress = []
+  completed = []
+  for hack in hackathons:
+    if hack.state == Hackathon.COMPLETED:
+      completed.append(hack)
+    elif hack.start > datetime.now():
+      in_future.append(hack)
+    else:
+      in_progress.append(hack)
+      
+  return render_to_response('index.html', {'hackathons': in_progress + in_future + completed, 'current_datetime': datetime.now()}, RequestContext(request))
  
 @check_login()
 def logout(request):

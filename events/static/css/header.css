@@ -5,3 +5,15 @@
 #header .username {
   font-weight: bold;
 }
+
+#header {
+  background-color: #E8EFF3;
+  color: #01243B;
+  padding: 8px;
+}
+
+#header a {
+  text-decoration: none;
+  color: #32556B;
+  font-weight: bold;
+}

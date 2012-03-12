@@ -2,3 +2,38 @@ body, input, textarea {
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
 }
+
+body {
+  margin: 0;
+  min-width: 700px;
+}
+
+#content {
+  padding: 8px;
+}
+
+#content a {
+  text-decoration: none;
+  color: #32556B;
+  font-weight: bold;
+}
+
+.login {
+  text-align: center;
+}
+
+.login img {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.avatar {
+  max-height: 30px;
+  max-width: 30px;
+  margin: 0 5px 0 0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  vertical-align: middle;
+}

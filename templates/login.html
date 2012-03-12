@@ -3,5 +3,10 @@
 {% block title %} Hackr Login {% endblock %}
 
 {% block content %}
-  <a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+  <div id='content'>
+    <div class='login'>
+      <div style='overflow:auto'><img src='{{STATIC_URL}}images/logo.png'></div>
+      <a href="{% url socialauth_begin 'google-profile' %}">Enter using Google</a>
+    </div>
+  </div>
 {% endblock %}

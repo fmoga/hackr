@@ -11,33 +11,50 @@
   <div id="content">
     <a href='{% url events.views.add_event %}'>Add event</a>
     {% for hack in hackathons %}
-      <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
-      <div class="indent">
+      <div class="event">
+        <h3><a href='{% url events.views.event hack.id %}'>{{hack.title}}</a></h3>
         {% if hack.state == hack.RUNNING and hack.start < current_datetime %}
-          In Progress
+          <span class="state">In Progress</span>
         {% endif %}
         {%if hack.state == hack.VOTING %}
-          Vote running
+          <span class="state">Vote running</span>
         {% endif %}
         {% if hack.state == hack.COMPLETED %}
-          Completed
+          <span class="state completed">Completed</span>
         {% endif %}
-        <p class="description mention">Added by {{hack.creator.get_profile.full_name}}</p>
-        <p class="description">{{hack.description|linebreaksbr}}</p>
-        <table class="details">
-          <tr>
-            <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
-            <td>{{hack.start.date}}</td>
-          </tr>
-          <tr>
-            <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
-            <td>{{hack.start.time}}</td>
-          </tr>
-          <tr>
-            <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
-            <td>{{hack.location}}</td>
-          </tr>
-        </table>
+        <div class="indent">
+          {% if hack.creator == user %}
+            <div class="mention controls">
+              {% if hack.state == hack.RUNNING %}
+                <a href='{% url events.views.event_state hack.id %}'>Start vote</a>
+              {% endif %}
+              {% if hack.state == hack.VOTING %}
+                <a href='{% url events.views.event_state hack.id %}'>End vote</a>
+              {% endif %}
+              <a href='{% url events.views.edit_event hack.id %}'>Edit</a>
+              <a class='delete' href='{% url events.views.delete_event hack.id %}'>Delete</a>
+            </div>
+          {% else %}
+            <p class="description mention">
+              Added by {{hack.creator.get_profile.full_name}}
+            </p>
+          {% endif %}
+          <p class="description">{{hack.description|linebreaksbr|urlize}}</p>
+          <table class="details">
+            <tr>
+              <td class='icon'><img src='{{STATIC_URL}}images/date.png'/></td>
+              <td>{{hack.start.date}}</td>
+            </tr>
+            <tr>
+              <td class='icon'><img src='{{STATIC_URL}}images/time.png'/></td>
+              <td>{{hack.start.time}}</td>
+            </tr>
+            <tr>
+              <td class='icon'><img src='{{STATIC_URL}}images/location.png'/></td>
+              <td>{{hack.location}}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     {% endfor %}
   </div>
