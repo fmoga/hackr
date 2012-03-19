@@ -19,7 +19,7 @@ Hackr is a web application for managing hackathons written using [Django][1].
 
 * `sudo apt-get install python-mysqldb python-pip`
 * MySQL database named `hackr`
-* Google application created via [Google APIs Console][2]. Add tokens to settings.py
+* Google application created via [Google APIs Console][2]. OAuth callback endpoint is `complete/google-profile/`. Add app tokens to settings.py.
 
 #### Dependencies
 
