@@ -13,12 +13,13 @@ Hackr is a web application for managing hackathons written using [Django][1].
 * Users can make proposals for best hackathon contribution or vote existing ones
 * Event creator can end the voting phase, making the results public
 
-### Install
+### Installation
 
 #### Requirements
 
 * `sudo apt-get install python-mysqldb python-pip`
 * MySQL database named `hackr`
+* Google application created via [Google APIs Console][2]. Add tokens to settings.py
 
 #### Dependencies
 
@@ -37,3 +38,4 @@ In order to alter the database but keep current data, execute the following:
     $ python manage.py loaddata dump.json
     
 [1]: https://www.djangoproject.com/
+[2]: https://code.google.com/apis/console/
