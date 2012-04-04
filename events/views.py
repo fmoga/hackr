@@ -20,7 +20,7 @@ def login_error(request):
 
 @check_login()
 def index(request):
-  hackathons = Hackathon.objects.filter(deleted=False)
+  hackathons = Hackathon.objects.filter(deleted=False).order_by('start')
   in_future = []
   in_progress = []
   completed = []
