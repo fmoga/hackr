@@ -44,7 +44,7 @@
         </table>
         <h4>Voters</h4>
         {% for voter in event.voters.all %}
-          <img class='avatar' alt='{{voter.get_profile.full_name}}' title='{{voter.get_profile.full_name}}' src='{{voter.get_profile.picture}}'>
+          <img class='avatar' alt='{{voter.get_profile.full_name}}' title='{{voter.get_profile.full_name}}' src='{{voter.get_profile.picture|default_picture}}'>
         {% endfor %}
       {% endif %}
     </div>

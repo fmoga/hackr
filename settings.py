@@ -146,14 +146,20 @@ AUTHENTICATION_BACKENDS = (
 
 AUTH_PROFILE_MODULE = "events.UserProfile"
 
+# Comment for dev environment
 GOOGLE_OAUTH2_CLIENT_ID      = '213765295946.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET  = 'ZoIgYBOoEjZ7FqtInCwARDhq'
+# Uncomment for dev environment
+# GOOGLE_OAUTH2_CLIENT_ID      = '593099766316.apps.googleusercontent.com'
+# GOOGLE_OAUTH2_CLIENT_SECRET  = 'aVw2Gx4Uy29M9N_nbJ_44AWe'
 
 LOGIN_URL          = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGIN_ERROR_URL    = '/login-error/'
 
 SOCIAL_AUTH_SESSION_EXPIRATION = False
+
+DEFAULT_PICTURE = "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg";
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

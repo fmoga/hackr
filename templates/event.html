@@ -70,7 +70,7 @@
           <div class="description">{{project.description|linebreaksbr|urlize}}</div>
           <div class='participants'>
             {% for hacker in project.hackers.all %}
-              <img class='avatar' alt=''{{hacker.get_profile.full_name}} title='{{hacker.get_profile.full_name}}' src='{{hacker.get_profile.picture}}'>
+              <img class='avatar' alt=''{{hacker.get_profile.full_name}} title='{{hacker.get_profile.full_name}}' src='{{hacker.get_profile.picture|default_picture}}'>
             {% endfor %}
             {% if user in project.hackers.all %}
               <a href='{% url events.views.leave_project project.id %}'>Leave</a>
@@ -84,7 +84,7 @@
             {% get_comment_list for project as comments %}
             {% for comment in comments %}
               <div class='comment'>
-                <img class='avatar left' src='{{comment.user.get_profile.picture}}'>
+                <img class='avatar left' src='{{comment.user.get_profile.picture|default_picture}}'>
                 <div class='author'>{{comment.user.get_profile.full_name}}</div>
                 <div class='comment_content'>{{comment.comment|linebreaksbr|urlize}}</div>
               </div>
